@@ -6,9 +6,9 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import book from '../../assets/banner-image2.png';
-import innovation from '../../assets/banner-image1.png';
-import heartSea from '../../assets/banner-image.png';
+import book from '../../../assets/banner-image2.png';
+import innovation from '../../../assets/banner-image1.png';
+import heartSea from '../../../assets/banner-image.png';
 
 
 // import required modules

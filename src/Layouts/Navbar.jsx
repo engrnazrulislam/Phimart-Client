@@ -20,6 +20,7 @@ const Navbar = () => {
                     <li><a>Submenu 2</a></li>
                 </ul> */}
                 </li>
+                <li><NavLink to={'/shop'} className={({isActive})=> isActive ? "btn btn-primary btn-soft":""}>Shop</NavLink></li>
                 <li><NavLink to={'/about'} className={({isActive})=> isActive ? "btn btn-primary btn-soft":""}>About</NavLink></li>
             </ul>
             </div>
@@ -38,6 +39,7 @@ const Navbar = () => {
                 </ul> */}
                 {/* </details> */}
             </li>
+            <li><NavLink to={'/shop'} className={({isActive})=> isActive ? "btn btn-primary btn-soft":""}>Shop</NavLink></li>
             <li><NavLink to={'/about'} className={({isActive})=> isActive ? "btn btn-primary btn-soft":""}>About</NavLink></li>
             </ul>
         </div>
