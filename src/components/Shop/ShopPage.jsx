@@ -1,46 +1,47 @@
-import { useEffect, useState } from 'react';
-import api_clients from '../../services/api_clients';
+import { useState } from 'react';
 import ProductList from './ProductList';
 import Pagination from './Pagination';
+import useFetchProduct from '../../hooks/useFetchProducts';
+import FilterSection from './FilterSection';
+import useFetchCategories from '../../hooks/useFetchCategories';
 const ShopPage = () => {
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
-    const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
-    useEffect(()=>{
-        fetchProducts();
-    },[currentPage]);
-    //Way:01
-    // const fetchProducts = ()=>{
-    //     setLoading(true)
-    //     api_clients.get(`/products/?page=${currentPage}`)
-    //     .then((res)=>{
-    //         setProducts(res.data.results);
-    //         setTotalPages(Math.ceil(res.data.count/res.data.results.length));
-    //     })
-    //     .catch((error)=>setError(error))
-    //     .finally(()=>setLoading(false))
-    // };
+    const [priceRange, setPriceRange] = useState([0, 100000]);
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
+    const [sortOrder,setSortOrder] = useState("");
+    const {products, loading, error, totalPages} = useFetchProduct(
+        currentPage, 
+        priceRange,
+        selectedCategory,
+        searchQuery,
+        sortOrder,
+    );
+    const categories = useFetchCategories();
 
-    //Way:02
-    const fetchProducts = async() => {
-        setLoading(true);
-        try{
-            const res = await api_clients.get(`/products/?page=${currentPage}`);
-            const data = await res.data;
-            setProducts(data.results);
-            setTotalPages(Math.ceil(data.count/data.results.length));
-        }catch(error){
-            setError(error);
-        }finally{
-            setLoading(false);
-        };
+    const handlePriceChange = (index, value) =>{
+        setPriceRange((prev)=>{
+            const newRange = [...prev];
+            newRange[index] = value;
+            return newRange;
+        });
+        setCurrentPage(1);
     };
 
-    
     return (
-       <section>
+       <section className="max-w-7xl mx-auto px-4 py-8">
+            <h1 className="text-3xl merg">Shop Our Products</h1>
+            <FilterSection 
+                priceRange={priceRange} 
+                handlePriceChange={handlePriceChange}
+                categories={categories}
+                selectedCategory={selectedCategory}
+                handleCategoryChange = {setSelectedCategory}
+                searchQuery={searchQuery}
+                handleSearchQuery={setSearchQuery}
+                sortOrder={sortOrder}
+                handleSorting={setSortOrder}
+            />
             <ProductList products={products} loading={loading} error={error}/>
             <Pagination totalPages={totalPages} currentPage={currentPage} handlePageChange={setCurrentPage}/>
        </section>
