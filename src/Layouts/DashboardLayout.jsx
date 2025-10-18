@@ -6,10 +6,10 @@ import Sidebar from '../components/Dashboard/Sidebar';
 const DashboardLayout = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+      setSidebarOpen(!sidebarOpen);
+    };
     return (
-         <div className="drawer lg:drawer-open">
+      <div className="drawer lg:drawer-open">
       {/* Mobile drawer checkbox */}
       <input
         id="drawer-toggle"

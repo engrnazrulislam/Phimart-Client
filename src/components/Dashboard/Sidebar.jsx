@@ -35,8 +35,8 @@ const Sidebar = () => {
 
           {/* Sidebar menu */}
           <ul className="menu menu-md gap-2">
-            {menuItems.map(item =>(
-                <li>
+            {menuItems.map((item, index) =>(
+                <li key={index}>
                 <Link to={item.to} className="flex items-center">
                     <item.icon className="h-4 w-4" />
                     <span>{item.label}</span>

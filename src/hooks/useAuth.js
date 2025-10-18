@@ -28,6 +28,29 @@ const useAuth = () =>{
         }
     };
 
+    //Update User Profile
+    const updateUserProfile = async(data)=>{
+        setErrorMsg("");
+        try{
+            api_clients.put('/auth/users/me/', data, 
+                {headers:{Authorization: `JWT ${authTokens?.access}`}}
+            );
+
+        }catch(error){
+            console.log(error);
+        }
+    }
+
+    //Change Password
+    const changePassword = (data)=>{
+        try{
+            api_clients.post('/auth/users/set_password/',data, {
+                headers:{Authorization: `JWT ${authTokens?.access}`}
+            })
+        }catch(error){
+            console.log(error);
+        }
+    }
 
     //Login User
     const loginUser = async (userData) =>{
@@ -68,7 +91,16 @@ const useAuth = () =>{
         setUser(null);
         localStorage.removeItem("authTokens");
     };
+    
 
-    return {user, errorMsg, loginUser,logoutUser, registerUser};
+    return {
+        user, 
+        errorMsg, 
+        loginUser,
+        logoutUser, 
+        registerUser, 
+        updateUserProfile,
+        changePassword,
+     };
 };
 export default useAuth;
