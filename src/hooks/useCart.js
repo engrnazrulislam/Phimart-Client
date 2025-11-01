@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import authApiClient from '../services/auth-api-client';
-
+import { useState } from "react";
+import api_clients from "../services/api_clients";
+import authApiClient from "../services/auth-api-client";
 
 const useCart = () => {
   const [authToken] = useState(
@@ -28,7 +28,10 @@ const useCart = () => {
   const AddCartItems = async (product_id, quantity) => {
     if (!cartId) await createOrGetCart();
     try {
-      const response = await authApiClient.post(`/carts/${cartId}/items/`, { product_id, quantity });
+      const response = await api_clients.post(`/carts/${cartId}/items/`, {
+        product_id,
+        quantity,
+      });
       return response.data;
     } catch (error) {
       console.log("Error adding Items", error);
@@ -37,6 +40,5 @@ const useCart = () => {
 
   return { cart, createOrGetCart, AddCartItems };
 };
-
 
 export default useCart;
