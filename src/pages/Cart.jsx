@@ -1,13 +1,50 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useCartContext from "../hooks/useCartContext";
 
 const Cart = () => {
-    const { cart, createOrGetCart } = useCartContext();
+    const { cart, loading, createOrGetCart, updateCartItemQuantity, } = useCartContext();
+    const [localCart, setLocalCart] = useState(cart);
+    
+    useEffect(() => {
+        if (!cart && !loading) createOrGetCart();
+    }, [createOrGetCart, cart, loading]);
 
     useEffect(() => {
-        createOrGetCart();
-    }, []);
-    return <div>{JSON.stringify(cart)}</div>;
-};
+        setLocalCart(cart);
+    }, [cart]);
+
+    const handleUpdateQuantity = async (itemId, newQuantity) => {
+    const prevLocalCartCopy = localCart; // store a copy of localCart
+    setLocalCart((prevLocalCart) => ({
+      ...prevLocalCart,
+      items: prevLocalCart.items.map((item) =>
+        item.id === itemId ? { ...item, quantity: newQuantity } : item
+    ),
+    }));
+    try {
+      await updateCartItemQuantity(itemId, newQuantity);
+    } catch (error) {
+      console.log(error);
+      setLocalCart(prevLocalCartCopy); // Rollback to previous state if API fails
+    }
+    };
+
+    if (loading) return <p>Loading...</p>;
+    if (!localCart) return <p>No Cart Found</p>;
+
+    return (
+    <div className="flex justify-between">
+      <div>
+        <Suspense fallback={<p>Loading...</p>}>
+          <CartItemList
+            items={localCart.items}
+            handleUpdateQuantity={handleUpdateQuantity}
+          />
+        </Suspense>
+      </div>
+      <div></div>
+    </div>
+    );
+    };
 
 export default Cart;
